@@ -1,1 +1,2 @@
-# ALL-IZ-WELL
+# MatterJSBoilerPlate
+MatterJSBoilerPlate
