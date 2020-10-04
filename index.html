@@ -1,19 +1,40 @@
-<!DOCTYPE html><html><head>
-    <script src="p5.js"></script>
-    <script src="p5.dom.min.js"></script>
-    <script src="p5.sound.min.js"></script>
-<script src="./p5.play.js"></script>
-<script src="matter.js"></script>
-    <link rel="stylesheet" type="text/css" href="style.css">
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
     <meta charset="utf-8">
+      <title>Virtual Pet-1</title>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.9.0/p5.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.9.0/addons/p5.dom.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.9.0/addons/p5.sound.min.js"></script>
+      <script src="p5.play.js"></script>
+      
+      <link rel="stylesheet" type="text/css" href="style.css"/>
+     
+    </head>
+    <body>
+      <!-- The core Firebase JS SDK is always required and must be listed first -->
+<script src="https://www.gstatic.com/firebasejs/7.21.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/7.21.0/firebase-database.js"></script>
 
-  </head>
-  <body>
+<!-- TODO: Add SDKs for Firebase products that you want to use
+     https://firebase.google.com/docs/web/setup#available-libraries -->
+
+<script>
+  // Your web app's Firebase configuration
+  var firebaseConfig = {
+    apiKey: "AIzaSyDlRdmwBbj6-faGbk4Yd0CWcde7VWaKxTA",
+    authDomain: "awwe-941d3.firebaseapp.com",
+    databaseURL: "https://awwe-941d3.firebaseio.com",
+    projectId: "awwe-941d3",
+    storageBucket: "awwe-941d3.appspot.com",
+    messagingSenderId: "461127998263",
+    appId: "1:461127998263:web:e051bfa49a6c25c66958b2"
+  };
+  // Initialize Firebase
+  firebase.initializeApp(firebaseConfig);
+</script>
+
       <script src="sketch.js"></script>
-      <script src="BaseClass.js"></script>
-      <script src="Ground.js"></script>
-      <script src="Particle.js"></script>
-      <script src="Plinko.js"></script>
-      <script src="Divisions.js"></script>
-
-</body></html>
+      <script src="food.js"></script>
+    </body>
+  </html>

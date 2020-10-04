@@ -1,129 +1,68 @@
-const Engine = Matter.Engine;
-const World = Matter.World;
-const Bodies = Matter.Bodies;
-const Constraint = Matter.Constraint;
+//Create variables here
+var dog, happyDog, foodS, foodStock, database;
+var feedDog, addFoods, fedTime, lastFed;
 
-var engine, world;
-var score = 0;
-var turn = 0;
-var particle;
-var gameState = "start";
-
-var divisionHeight = 300;
-var plinkos = [];
-var particles = [];
-var divisions = [];
-
-function preload(){
-
+function preload()
+{
+  dogImage = loadImage("images/dogImg.png");
+  dogImage1 = loadImage("images/dogImg1.png");
 }
 
 function setup() {
-  createCanvas(800,800);
+  database = firebase.database();
 
-  engine = Engine.create();
-    world = engine.world;
+	createCanvas(500, 500);
+  dog = createSprite(400,400,50,60);
+  dog.addImage("dog",dogImage);
+  dog.scale = 0.20;
 
-ground = new G(width/2,  height,width, 20);
-for (var k = 0; k <= width; k = k + 80){
-  divisions.push(new Divisions(k, height - divisionHeight/2, 10, divisionHeight));
-}
-for (var j = 75; j <= width; j = j + 50){
-  plinkos.push(new P(j, 75));
-}
-for (var j = 50; j <= width - 10; j = j + 50){
-  plinkos.push(new P(j, 175));
-}
-for (var j = 75; j <= width; j = j + 50){
-  plinkos.push(new P(j, 275));
-}
-for (var j = 50; j <= width - 10; j = j + 50){
-  plinkos.push(new P(j, 375));
-}
-
-}
-
-
-
-function draw() {
-  background(0); 
+  foodObj = new Food();
   
-  noStroke();
-  
-  textSize(20);
-  fill("white");
-  text("Score: "+score, 650, 20);
-  
-  textSize(25);
-  text("500", 20, 600);
-  text("500", 100, 600);
-  text("500", 180, 600);
-  text("500", 260, 600);
-  text("100", 340, 600);
-  text("100", 420, 600);
-  text("100", 500, 600);
-  text("200", 580, 600);
-  text("200", 660, 600);
-  text("200", 740, 600);
-  Engine.update(engine);
-  ground.display();
+  feed = createButton("Feed the dog");
+  feed.position(700, 95);
+  feed.mousePressed(feedDog);
 
-  if (gameState === "end"){
-    noStroke();
-    textSize(50);
-    fill("white");
-    text("GameOver", 300, 450);
+  addFood = createButton("Add the food stock");
+  addFood.position(800, 95);
+  addFood.mousePressed(addFoods);
+
+}
+
+
+function draw() {  
+  background(46, 139, 87);
+
+  foodObj.display();
+  
+  fill(255, 255, 254);
+  textSize(15);
+  if (lastFed >= 12){
+    text("Last fed: "+ lastFed % 12 + "PM", 150, 30);
+  } else if(lastFed === 0){
+    text("Last fed: 12 AM", 150, 30);
+  }else{
+    text("Last fed: "+ lastFed + "AM", 150, 30);
   }
-
-for (var i = 0; i < plinkos.length; i++){
-  plinkos[i].display();
-}
-    if(particle!=null)
-    {
-       particle.display();
-        
-        if (particle.body.position.y>760)
-        {
-              if (particle.body.position.x < 300) 
-              {
-                  score=score+500;      
-                  particle=null;
-                  if ( turn>= 5) gameState ="end";                          
-              }
-
-
-              else if (particle.body.position.x < 600 && particle.body.position.x > 301 ) 
-              {
-                    score = score + 100;
-                    particle=null;
-                    if ( turn>= 5) gameState ="end";
-
-              }
-              else if (particle.body.position.x < 900 && particle.body.position.x > 601 )
-              {
-                    score = score + 200;
-                    particle=null;
-                    if ( turn>= 5)  gameState ="end";
-
-              }      
-              
-        }
-  
-      }
-  //if (gameState !== "end"){
-  //  text("place your mouse pointer to position the particle. Click space to make it fall", 50, 450);
-  //}
-  for (var k = 0; k < divisions.length; k++){
-    divisions[k].display();
-  }
-
+ 
+  fedTime = database.ref('FeedTime');
+  fedTime.on("value", (data) => {
+    lastFed = data.val();
+  })
   drawSprites();
 }
-function mouseClicked(){
-  if (gameState !== "end"){
+ function feedDog(){
+  dog.addImage("dog", dogImage1);
 
-  turn++;
-    particle = new Particles(mouseX, 10, 10, 10);
-  }
+  foodObj.updateFoodStock(foodObj.getFoodStock()-1);
+  database.ref('/').update({
+    foodS: foodObj.getFoodStock(),
+    FeedTime: hour()
+  })
 }
+function addFoods(){
+  foodS++
+  database.ref('/').update({
+    Food: foodS
+  })
 
+}
